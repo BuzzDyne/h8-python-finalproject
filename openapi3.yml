@@ -1,0 +1,363 @@
+openapi: 3.0.0
+info:
+  title: Sample API
+  description: This is the openapi file that goes with our server code
+  version: 1.0.0
+
+servers:
+  - url: /api
+
+paths:
+  /director:
+    get:
+      operationId: director.read_all
+      tags:
+        - Director
+      summary: Read the entire set of director, sorted by id
+      description: Read the entire set of director, sorted by id
+      responses:
+        200:
+          description: Successfully read director set operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DirectorOnly'
+    
+    post:
+      operationId: director.create
+      tags:
+        - Director
+      summary: Create a director
+      description: Create a new director
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              x-body-name: dir
+              $ref: '#/components/schemas/DirectorIn'
+      responses:
+        201:
+          description: Successfully created director
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DirectorOnly'
+
+  /director/id/{dir_id}:
+    get:
+      operationId: director.read_by_id
+      tags:
+        - Director
+      summary: Read a specific director
+      description: Read a specific director
+      parameters:
+        - name: dir_id
+          in: path
+          description: Id of the director to get
+          required: True
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Successfully read director
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DirectorOnly'
+
+    put:
+      operationId: director.edit
+      tags:
+        - Director
+      summary: Update a director
+      description: Update a director
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              x-body-name: director
+              $ref: '#/components/schemas/DirectorIn'
+      parameters:
+        - name: dir_id
+          in: path
+          description: Id the director to update
+          required: True
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Successfully updated director
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/DirectorOnly'
+
+    delete:
+      operationId: director.delete
+      tags:
+        - Director
+      summary: Delete a director from the Director list
+      description: Delete a director
+      parameters:
+        - name: dir_id
+          in: path
+          description: Id of the Director to delete
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Successfully deleted a Director
+
+  /director/id/{dir_id}/movies:
+    get:
+      operationId: director.get_movies_by_dirID
+      tags:
+        - Director
+      summary: Read all movies directed by a specific director
+      description: Read all movies directed by a specific director
+      parameters:
+        - name: dir_id
+          in: path
+          description: Id of the director
+          required: True
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Successfully read movie set operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MovieOnly'
+
+  /movie:
+    get:
+      operationId: movie.read_all
+      tags:
+        - Movie
+      summary: Read the entire set of movie, sorted by id
+      responses:
+        200:
+          description: Successfully read movie set operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MovieOnly'
+
+    post:
+      operationId: movie.create
+      tags:
+        - Movie
+      summary: Create a movie
+      description: Create a new movie
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              x-body-name: mov
+              $ref: '#/components/schemas/MovieIn'
+      responses:
+        201:
+          description: Successfully created movie
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MovieOnly'
+
+  /movie/id/{mov_id}:
+    get:
+      operationId: movie.read_by_id
+      tags:
+        - Movie
+      summary: Read a specific movie
+      description: Read a specific movie
+      parameters:
+        - name: mov_id
+          in: path
+          description: Id of the movie to get
+          required: True
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Successfully read movie
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MovieOnly'
+
+    put:
+      operationId: movie.edit
+      tags:
+        - Movie
+      summary: Update a movie
+      description: Update a movie
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              x-body-name: mov
+              $ref: '#/components/schemas/MovieIn'
+      parameters:
+        - name: mov_id
+          in: path
+          description: Id the movie to update
+          required: True
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Successfully updated movie
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/MovieOnly'
+
+    delete:
+      operationId: movie.delete
+      tags:
+        - Movie
+      summary: Delete a movie from the Movie list
+      description: Delete a movie
+      parameters:
+        - name: mov_id
+          in: path
+          description: Id of the Movie to delete
+          required: true
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Successfully deleted a Movie
+
+components:
+  schemas:
+    DirectorOnly:
+      type: object
+      properties:
+          id:
+            type: integer
+            description: Id of the director
+          name:
+            type: string
+            description: Name of the director
+          gender:
+            type: integer
+            description: Gender of the director
+          uid:
+            type: integer
+            description: Uid of the director
+          department:
+            type: string
+            description: Department of the director
+    DirectorIn:
+      type: object
+      properties:
+          name:
+            type: string
+            description: Name of the director
+          gender:
+            type: integer
+            description: Gender of the director
+          uid:
+            type: integer
+            description: Uid of the director
+          department:
+            type: string
+            description: Department of the director
+    MovieOnly:
+      type: object
+      properties:
+          id:
+            type: integer
+            description: id of the movie 
+          original_title:
+            type: string
+            description: original_title of the movie 
+          budget:
+            type: integer
+            description: budget of the movie 
+          popularity:
+            type: integer
+            description: popularity of the movie 
+          release_date:
+            type: string
+            format: date
+            example: "2021-01-30"
+            description: release_date of the movie 
+          revenue:
+            type: integer
+            description: revenue of the movie 
+          title:
+            type: string
+            description: title of the movie 
+          vote_average:
+            type: number
+            description: vote_average of the movie 
+          vote_count:
+            type: integer
+            description: vote_count of the movie 
+          overview:
+            type: string
+            description: overview of the movie 
+          tagline:
+            type: string
+            description: tagline of the movie 
+          uid:
+            type: integer
+            description: uid of the movie 
+          director_id:
+            type: integer
+            description: director_id of the movie
+    MovieIn:
+      type: object
+      properties:
+          original_title:
+            type: string
+            description: original_title of the movie 
+          budget:
+            type: integer
+            description: budget of the movie 
+          popularity:
+            type: integer
+            description: popularity of the movie 
+          release_date:
+            type: string
+            format: date
+            example: "2021-01-30"
+            description: release_date of the movie 
+          revenue:
+            type: integer
+            description: revenue of the movie 
+          title:
+            type: string
+            description: title of the movie 
+          vote_average:
+            type: number
+            description: vote_average of the movie 
+          vote_count:
+            type: integer
+            description: vote_count of the movie 
+          overview:
+            type: string
+            description: overview of the movie 
+          tagline:
+            type: string
+            description: tagline of the movie 
+          uid:
+            type: integer
+            description: uid of the movie 
+          director_id:
+            type: integer
+            description: director_id of the movie

@@ -36,12 +36,21 @@ class DirectorSchema(ma.SQLAlchemyAutoSchema):
 
     class Meta:
         model = Director
+        sqla_session = db.session
+        load_instance = True
+
+class DirectorAndTheirMovieSchema(ma.SQLAlchemyAutoSchema):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
+
+    class Meta:
+        model = Director
         sqla_session = db.session    
         load_instance = True
 
-    movies = fields.Nested('DirectorMovieSchema', default=[], many=True)
+    movies = fields.Nested('MovieOnlySchema', default=[], many=True)
 
-class DirectorMovieSchema(ma.SQLAlchemyAutoSchema):
+class MovieOnlySchema(ma.SQLAlchemyAutoSchema):
     """
     This class exists to get around a recursion issue
     """
@@ -70,10 +79,20 @@ class MovieSchema(ma.SQLAlchemyAutoSchema):
     class Meta:
         model = Movie
         sqla_session = db.session
+        include_fk = True
+        load_instance = True
 
-    director = fields.Nested("MovieDirectorSchema", default=None)
+class MovieAndItsDirectorSchema(ma.SQLAlchemyAutoSchema):
+    def __init__(self, **kwargs):
+        super().__init__(**kwargs)
 
-class MovieDirectorSchema(ma.SQLAlchemyAutoSchema):
+    class Meta:
+        model = Movie
+        sqla_session = db.session
+
+    director = fields.Nested("DirectorOnlySchema", default=None)
+
+class DirectorOnlySchema(ma.SQLAlchemyAutoSchema):
     """
     This class exists to get around a recursion issue
     """

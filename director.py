@@ -1,18 +1,17 @@
 from flask import make_response, abort
 from config import db
-from models import Director, DirectorMovieSchema, DirectorSchema, Movie, MovieDirectorSchema
+from models import Director, DirectorAndTheirMovieSchema, DirectorSchema, Movie, MovieAndItsDirectorSchema, MovieOnlySchema, MovieSchema
 
 def read_all():
     dirs = Director.query.order_by(Director.id).all()
     
-    dir_schema = MovieDirectorSchema(many=True)
+    dir_schema = DirectorSchema(many=True)
     data = dir_schema.dump(dirs)
     return data
 
 def read_by_id(dir_id):
     dir = (
         Director.query.filter(Director.id == dir_id)
-        .outerjoin(Movie)
         .one_or_none()
     )
 
@@ -27,7 +26,6 @@ def read_by_id(dir_id):
     # Otherwise, nope, didn't find that person
     else:
         abort(404, f"Director not found for Id: {dir_id}")
-
 
 def create(dir):
     # Create a person instance using the schema and the passed in person
@@ -65,7 +63,7 @@ def edit(dir_id, director):
         # return updated person in the response
         data = schema.dump(update_director)
 
-        return data, 200
+        return data, 202
 
     # Otherwise, nope, didn't find that person
     else:
@@ -80,4 +78,21 @@ def delete(dir_id):
         return make_response(f"Director {dir_id} deleted", 200)
 
     else:
-        abort(404, f"Person not found for Id: {dir_id}")
+        abort(404, f"Director not found for Id: {dir_id}")
+
+def get_movies_by_dirID(dir_id):
+    movs = (
+        Movie.query.join(Director, Director.id == Movie.director_id)
+        .filter(Director.id == dir_id)
+        .all()
+    )
+
+    movs = (
+        Movie.query.join(Director, Director.id == Movie.director_id)
+        .filter(Director.id == dir_id)
+        .all()
+    )
+
+    mov_schema = MovieOnlySchema(many=True)
+    data = mov_schema.dump(movs)
+    return data
