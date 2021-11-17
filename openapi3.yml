@@ -48,7 +48,7 @@ paths:
 
   /director/financial_summary/limit/{limit}:
     get:
-      operationId: director.read_summary_financial
+      operationId: director.read_director_highest_revenue_budget_ratio
       tags:
         - Director
       summary: Get Directors with movie financial data, limited by the specified number
@@ -163,7 +163,7 @@ paths:
 
   /director/id/{dir_id}/movies:
     get:
-      operationId: director.get_movies_by_dirID
+      operationId: movie.get_movies_by_dirID
       tags:
         - Director
       summary: Read all movies directed by a specific director
