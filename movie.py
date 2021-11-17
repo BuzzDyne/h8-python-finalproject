@@ -38,7 +38,6 @@ def create(mov):
 
     # Serialize and return the newly created person in the response
     data = schema.dump(new_mov)
-    print(data)
 
     return data, 201
 
