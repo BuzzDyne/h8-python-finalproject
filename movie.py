@@ -1,9 +1,43 @@
+from sqlalchemy.exc import NoResultFound, MultipleResultsFound
 from flask import make_response, abort
 from config import db
 from models import Director, Movie, MovieAndItsDirectorSchema, MovieSchema, MovieOnlySchema
 
 def read_all():
     movs = Movie.query.order_by(Movie.id).all()
+    
+    mov_schema = MovieOnlySchema(many=True)
+    data = mov_schema.dump(movs)
+    return data
+
+def read_with_director_and_limit(limit):
+    movs = Movie.query.order_by(Movie.id).limit(limit)
+    
+    mov_schema = MovieAndItsDirectorSchema(many=True)
+    data = mov_schema.dump(movs)
+    return data
+
+def read_highest_revenue(limit):
+    movs = Movie.query.order_by(Movie.revenue.desc()).limit(limit)
+    
+    mov_schema = MovieAndItsDirectorSchema(many=True)
+    data = mov_schema.dump(movs)
+    return data
+
+def read_movie_by_director_name(name):
+    try:
+        dir = Director.query.filter(Director.name == name).one()
+    except NoResultFound:
+        abort(404, f"No Director named ({name}) found!")
+    
+    movs = Movie.query.filter(Movie.director_id == dir.id).all()
+    
+    mov_schema = MovieAndItsDirectorSchema(many=True)
+    data = mov_schema.dump(movs)
+    return data
+
+def read_movie_sort_latest(limit):
+    movs = Movie.query.order_by(Movie.release_date.desc()).limit(limit)
     
     mov_schema = MovieOnlySchema(many=True)
     data = mov_schema.dump(movs)

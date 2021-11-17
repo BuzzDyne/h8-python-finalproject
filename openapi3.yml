@@ -12,7 +12,7 @@ paths:
     get:
       operationId: director.read_all
       tags:
-        - Director
+        - Director (CRUD)
       summary: Read the entire set of director, sorted by id
       description: Read the entire set of director, sorted by id
       responses:
@@ -28,7 +28,7 @@ paths:
     post:
       operationId: director.create
       tags:
-        - Director
+        - Director (CRUD)
       summary: Create a director
       description: Create a new director
       requestBody:
@@ -46,11 +46,59 @@ paths:
               schema:
                 $ref: '#/components/schemas/DirectorOnly'
 
+  /director/financial_summary/limit/{limit}:
+    get:
+      operationId: director.read_summary_financial
+      tags:
+        - Director
+      summary: Get Directors with movie financial data, limited by the specified number
+      description: Custom Serializer
+      parameters:
+        - name: limit
+          in: path
+          description: Limit how many data to get
+          required: True
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Successfully read director set operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DirectorOnly'
+
+  /directors-movies/limit/{limit}:
+    get:
+      operationId: director.read_with_movie_and_limit
+      tags:
+        - Director
+      summary: Get Directors with Their Movies limited by the specified number
+      description: Relational Query
+      parameters:
+        - name: limit
+          in: path
+          description: Limit how many data to get
+          required: True
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Successfully read director set operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/DirectorOnly'
+
   /director/id/{dir_id}:
     get:
       operationId: director.read_by_id
       tags:
-        - Director
+        - Director (CRUD)
       summary: Read a specific director
       description: Read a specific director
       parameters:
@@ -71,7 +119,7 @@ paths:
     put:
       operationId: director.edit
       tags:
-        - Director
+        - Director (CRUD)
       summary: Update a director
       description: Update a director
       requestBody:
@@ -99,7 +147,7 @@ paths:
     delete:
       operationId: director.delete
       tags:
-        - Director
+        - Director (CRUD)
       summary: Delete a director from the Director list
       description: Delete a director
       parameters:
@@ -137,11 +185,11 @@ paths:
                 items:
                   $ref: '#/components/schemas/MovieOnly'
 
-  /movie:
+  /movies:
     get:
       operationId: movie.read_all
       tags:
-        - Movie
+        - Movie (CRUD)
       summary: Read the entire set of movie, sorted by id
       responses:
         200:
@@ -156,7 +204,7 @@ paths:
     post:
       operationId: movie.create
       tags:
-        - Movie
+        - Movie (CRUD)
       summary: Create a movie
       description: Create a new movie
       requestBody:
@@ -174,11 +222,107 @@ paths:
               schema:
                 $ref: '#/components/schemas/MovieOnly'
 
+  /movies/director-name/{name}:
+    get:
+      operationId: movie.read_movie_by_director_name
+      tags:
+        - Movie
+      summary: Get Movies by the director name
+      description: Get Movies by the director name
+      parameters:
+        - name: name
+          in: path
+          description: Limit how many data to get
+          required: True
+          schema:
+            type: string
+      responses:
+        200:
+          description: Successfully read movie set operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MovieOnly'
+
+  /movies/latest/limit/{limit}:
+    get:
+      operationId: movie.read_movie_sort_latest
+      tags:
+        - Movie
+      summary: Get Movies sorted by release date, limited by the specified number
+      description: Date Sorting
+      parameters:
+        - name: limit
+          in: path
+          description: Limit how many data to get
+          required: True
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Successfully read movie set operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MovieOnly'
+
+  /movies-directors/limit/{limit}:
+    get:
+      operationId: movie.read_with_director_and_limit
+      tags:
+        - Movie
+      summary: Get Movies with Their Director limited by the specified number
+      description: Get Movies with Their Director limited by the specified number
+      parameters:
+        - name: limit
+          in: path
+          description: Limit how many data to get
+          required: True
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Successfully read movie set operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MovieOnly'
+
+  /movies/most_revenue/limit/{limit}:
+    get:
+      operationId: movie.read_highest_revenue
+      tags:
+        - Movie
+      summary: Get Movies with highest revenue limited by the specified number
+      description: Get Movies with highest revenue limited by the specified number
+      parameters:
+        - name: limit
+          in: path
+          description: Limit how many data to get
+          required: True
+          schema:
+            type: integer
+      responses:
+        200:
+          description: Successfully read movie set operation
+          content:
+            application/json:
+              schema:
+                type: array
+                items:
+                  $ref: '#/components/schemas/MovieOnly'
+
   /movie/id/{mov_id}:
     get:
       operationId: movie.read_by_id
       tags:
-        - Movie
+        - Movie (CRUD)
       summary: Read a specific movie
       description: Read a specific movie
       parameters:
@@ -199,7 +343,7 @@ paths:
     put:
       operationId: movie.edit
       tags:
-        - Movie
+        - Movie (CRUD)
       summary: Update a movie
       description: Update a movie
       requestBody:
@@ -227,7 +371,7 @@ paths:
     delete:
       operationId: movie.delete
       tags:
-        - Movie
+        - Movie (CRUD)
       summary: Delete a movie from the Movie list
       description: Delete a movie
       parameters:
