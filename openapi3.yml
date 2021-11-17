@@ -51,7 +51,7 @@ paths:
       operationId: director.read_director_highest_revenue_budget_ratio
       tags:
         - Director
-      summary: Get Directors with movie financial data, limited by the specified number
+      summary: Get Directors with movie financial data, limited by the specified number, sorted by highest revenue/budget ratio
       description: Custom Serializer
       parameters:
         - name: limit
@@ -232,7 +232,7 @@ paths:
       parameters:
         - name: name
           in: path
-          description: Limit how many data to get
+          description: Name of Director
           required: True
           schema:
             type: string
