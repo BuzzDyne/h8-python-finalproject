@@ -12,7 +12,7 @@ def read_all():
     list of MovieSchema object
     """
     # Read all entries of Movie ordered by its id
-    movs = Movie.query.order_by(Movie.id).all()
+    movs = Movie.query.order_by(Movie.id).limit(100)
     
     # Declare Schema to use (Passing many=True to indicate more than one object will be returned)   
     mov_schema = MovieSchema(many=True)

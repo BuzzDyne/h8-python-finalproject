@@ -13,7 +13,7 @@ def read_all():
     list of DirectorSchema object
     """
     # Read all entries of Director ordered by its id
-    dirs = Director.query.order_by(Director.id).all()
+    dirs = Director.query.order_by(Director.id).limit(100)
 
     # Declare Schema to use (Passing many=True to indicate more than one object will be returned)   
     dir_schema = DirectorSchema(many=True)
