@@ -60,12 +60,12 @@ class MyTestCase(unittest.TestCase):
         )
 
     def test_d_get_all_movie(self):
-        result = self.app.get('/api/movie')
+        result = self.app.get('/api/movies')
         # Make your assertions
         self.assertEqual(result.status_code, 200)
 
     def test_e_post_movie(self):
-        result = self.app.post('/api/movie', json=self.mov_payload)
+        result = self.app.post('/api/movies', json=self.mov_payload)
 
         result_data = result.get_json()
 
